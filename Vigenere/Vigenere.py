@@ -4,14 +4,19 @@ import sys
 
 class VigenereCipher:
 
-    def prepare(self):
+    letters_frequencies = {"a": 82, "b": 15, "c": 28, "d": 43, "e": 127, "f": 22, "g": 20, "h": 61, "i": 70, "j": 2,
+                           "k": 8, "l": 40, "m": 24, "n": 67, "o": 75, "p": 29, "q": 1, "r": 60, "s": 63, "t": 91,
+                           "u": 28, "v": 10, "w": 23, "x": 1, "y": 20, "z": 1}
+    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+    def prepare_files(self):
+        with open("orig.txt", "r+") as file:
+            f = file.read()
         result = ""
-        with open("key.txt", "r+") as file:
-            for line in file:
-                result += line.lower().strip()
-            result = re.sub('\W+', '', result)
-            file.seek(0)
-            file.truncate()
+        for line in f:
+            result += line.lower().strip()
+        result = re.sub('\W+', '', result)
+        with open("plain.txt", "w") as file:
             file.write(result)
 
     def key_length(self):
@@ -26,7 +31,6 @@ class VigenereCipher:
                     k_length += 1
 
         return k_length
-
 
     def encrypt(self):
         with open("key.txt") as file:
@@ -51,15 +55,13 @@ class VigenereCipher:
                 else:
                     result += "\n"
 
-                print(result)
-            with open("encrypt.txt", "w") as file:
+            with open("crypto.txt", "w") as file:
                 file.write(result)
 
-
     def decrypt(self):
-        with open("key.txt") as file:
+        with open("key-crypto.txt") as file:
             k = file.readline()
-        with open("encrypt.txt") as file:
+        with open("crypto.txt") as file:
             f2 = file.read()
 
         result = ""
@@ -79,9 +81,59 @@ class VigenereCipher:
                 else:
                     result += "\n"
 
-                print(result)
             with open("decrypt.txt", "w") as file:
                 file.write(result)
+
+    def cryptanalysis(self):
+        dict = {}
+        result = ""
+
+        with open("crypto.txt") as file:
+            message = file.readline()
+
+        key_length = 4
+
+        for r in range(0, key_length):
+            dict.clear()
+            sum = 0
+            sum2 = 0
+            biggest = 0
+
+            kl = 0
+            for x in range(r, len(message), key_length):
+                if message[x] not in dict:
+                    dict[message[x]] = 1
+                else:
+                    dict[message[x]] += 1
+                    sum += 1
+                kl += key_length
+
+            for key in dict:
+                dict[key] = dict[key]/sum
+
+            i = 0
+            j = 0
+            pos = 0
+
+            for counter in dict:
+                for key in dict:
+                    if ord(key) - i < 97:
+                        shift = chr(ord(key) - i + 25)
+                        sum2 += self.letters_frequencies[shift] * dict[key]
+                    else:
+                        shift = chr(ord(key) - i)
+                        sum2 += self.letters_frequencies[shift] * dict[key]
+                i += 1
+                j += 1
+                if biggest < sum2:
+                    biggest = sum2
+                    pos = j
+                sum2 = 0
+            result += self.alphabet[pos-1]
+        with open("key-crypto.txt", "w") as file:
+            file.write(result)
+
+
 
 
 for argument in sys.argv:
@@ -90,8 +142,10 @@ for argument in sys.argv:
     vc = VigenereCipher()
 
     if argument == "p":
-        vc.prepare()
+        vc.prepare_files()
     elif argument == "e":
         vc.encrypt()
     elif argument == "d":
         vc.decrypt()
+    elif argument == "c":
+        vc.cryptanalysis()
