@@ -1,0 +1,18 @@
+programmers at openai an artificial intelligence research compan
+y recently taught a gaggle of intelligent artificial agents  bot
+s  to play hideandseek not because they cared who won the goal w
+as to observe how competition between hiders and seekers would d
+rive the bots to find and use digital tools the idea is familiar
+ to anyone whos ever played the game in real life its a kind of 
+scaleddown arms race when your opponent adopts a strategy that w
+orks you have to abandon what you were doing before and find a n
+ew better plan its the rule that governs games from chess to sta
+rcraft ii its also an adaptation that seems likely to confer an 
+evolutionary advantageso it went with hideandseek even though th
+e ai agents hadnt received explicit instructions about how to pl
+ay they soon learned to run away and chase after hundreds of mil
+lions of games they learned to manipulate their environment to g
+ive themselves an advantage the hiders for example learned to bu
+ild miniature forts and barricade themselves inside the seekers 
+in response learned how to use ramps to scale the walls and find
+ the hiders
